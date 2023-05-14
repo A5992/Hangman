@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hangman/mechanics/hangman_game.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -31,7 +32,10 @@ class _MainMenuState extends State<MainMenu> {
             const SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
-                // TODO: Handle New Game button press
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HangmanGame()),
+                );
               },
               child: const Text('New Game'),
             ),
