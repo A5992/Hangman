@@ -1,93 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/mechanics/hangman_words.dart';
+import 'package:hangman/mechanics/on_screen_keyboard.dart';
+import 'package:hangman/mechanics/status_image.dart';
+import 'package:hangman/mechanics/underscores.dart';
+import 'package:hangman/mechanics/hint_category.dart';
 
 class HangmanGame extends StatefulWidget {
   const HangmanGame({Key? key}) : super(key: key);
 
   @override
-  _HangmanGameState createState() => _HangmanGameState();
+  State<HangmanGame> createState() => _HangmanGameState();
 }
 
 class _HangmanGameState extends State<HangmanGame> {
-  late WordCategory _wordCategory;
-  late String _underscores;
+  late String _word;
+  late String _category;
+  late List<String> _displayedWord;
+  final Set<String> _guessedLetters = {};
+  String get _displayedWordWithUnderscores =>
+      _displayedWord.map((c) => c == '_' ? '_ ' : '$c ').join();
 
   @override
   void initState() {
     super.initState();
-    _wordCategory = getRandomWord();
-    _underscores = '_ ' * _wordCategory.word.length;
+    final wordAndCategory = _randomWordAndCategory();
+    _word = wordAndCategory.word;
+    _category = wordAndCategory.category;
+    _displayedWord = List.generate(_word.length, (_) => '_');
+  }
+
+  WordAndCategory _randomWordAndCategory() {
+    return WordAndCategory(
+      word: 'Berlin',
+      category: 'Cities',
+    );
+  }
+
+  void _guessLetter(String letter) {
+    setState(() {
+      _guessedLetters.add(letter);
+    });
+    if (_word.contains(letter)) {
+      for (int i = 0; i < _word.length; i++) {
+        if (_word[i] == letter) {
+          setState(() {
+            _displayedWord[i] = letter;
+          });
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Hangman'),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const StatusImage(),
-            Text(
-              _underscores,
-              style: const TextStyle(fontSize: 50),
-            ),
-            const GuessedLetters(),
-            HintCategory(category: _wordCategory.category),
-          ],
-        ));
-  }
-}
-
-class StatusImage extends StatelessWidget {
-  const StatusImage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Icon(
-      Icons.sentiment_very_dissatisfied,
-      size: 100,
-      color: Colors.red,
+      appBar: AppBar(
+        title: const Text('Hangman'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const StatusImage(),
+          Text(
+            _displayedWordWithUnderscores,
+            style: const TextStyle(fontSize: 50),
+          ),
+          OnScreenKeyboard(
+            onLetterPressed: _guessLetter,
+          ),
+          HintCategory(category: _category),
+        ],
+      ),
     );
   }
 }
 
-class Underscores extends StatelessWidget {
-  const Underscores({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      '_ _ _ _',
-      style: TextStyle(fontSize: 50),
-    );
-  }
-}
-
-class GuessedLetters extends StatelessWidget {
-  const GuessedLetters({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Text(
-      'Guessed Letters: ',
-      style: TextStyle(fontSize: 20),
-    );
-  }
-}
-
-class HintCategory extends StatelessWidget {
+class WordAndCategory {
+  final String word;
   final String category;
 
-  const HintCategory({Key? key, required this.category}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      '$category ',
-      style: const TextStyle(fontSize: 20),
-    );
-  }
+  WordAndCategory({required this.word, required this.category});
 }
