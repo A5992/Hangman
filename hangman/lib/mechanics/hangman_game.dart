@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:hangman/mechanics/hangman_words.dart';
 import 'package:hangman/mechanics/on_screen_keyboard.dart';
 import 'package:hangman/mechanics/status_image.dart';
@@ -20,6 +21,9 @@ class _HangmanGameState extends State<HangmanGame> {
   String get _displayedWordWithUnderscores =>
       _displayedWord.map((c) => c == '_' ? '_ ' : '$c ').join();
 
+  int _maxIncorrectGuesses = 6;
+  int _currentIncorrectGuesses = 0;
+
   @override
   void initState() {
     super.initState();
@@ -37,42 +41,78 @@ class _HangmanGameState extends State<HangmanGame> {
   }
 
   void _guessLetter(String letter) {
+    String lowerLetter = letter.toLowerCase();
+    String lowerWord = _word.toLowerCase();
     setState(() {
       _guessedLetters.add(letter);
     });
-    if (_word.contains(letter)) {
+    if (lowerWord.contains(lowerLetter)) {
       for (int i = 0; i < _word.length; i++) {
-        if (_word[i] == letter) {
+        if (lowerWord[i] == lowerLetter) {
           setState(() {
             _displayedWord[i] = letter;
           });
+                     } } } else { setState(() {
+              _currentIncorrectGuesses++;} 
+          );
         }
       }
-    }
+    bool _isGameOver() {
+      return _currentIncorrectGuesses >= _maxIncorrectGuesses ||
+          _hasWon();
   }
+    bool _hasWon() {
+      return !_displayedWord.contains('_');
+    }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hangman'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const StatusImage(),
-          Text(
-            _displayedWordWithUnderscores,
-            style: const TextStyle(fontSize: 50),
+    if (_isGameOver()) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Hangman'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _hasWon() ? 'Congratulations! You won!' : 'Game Over! You lost!',
+                style: const TextStyle(fontSize: 32),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Go back to Main Menu'),
+              ),
+            ],
           ),
-          OnScreenKeyboard(
-            onLetterPressed: _guessLetter,
-          ),
-          HintCategory(category: _category),
-        ],
-      ),
-    );
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Hangman'),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const StatusImage(),
+            Text(
+              _displayedWordWithUnderscores,
+              style: const TextStyle(fontSize: 50),
+            ),
+            OnScreenKeyboard(
+              onLetterPressed: _guessLetter,
+            ),
+            HintCategory(category: _category),
+          ],
+        ),
+      );
+    }
   }
 }
 
