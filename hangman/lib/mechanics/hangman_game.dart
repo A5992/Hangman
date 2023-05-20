@@ -21,7 +21,7 @@ class _HangmanGameState extends State<HangmanGame> {
   String get _displayedWordWithUnderscores =>
       _displayedWord.map((c) => c == '_' ? '_ ' : '$c ').join();
 
-  int _maxIncorrectGuesses = 6;
+  final int _maxIncorrectGuesses = 6;
   int _currentIncorrectGuesses = 0;
 
   @override
