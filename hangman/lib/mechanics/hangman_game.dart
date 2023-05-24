@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-// ignore: unused_import
-import 'package:hangman/mechanics/hangman_words.dart';
 import 'package:hangman/mechanics/on_screen_keyboard.dart';
 import 'package:hangman/mechanics/status_image.dart';
-import 'package:hangman/mechanics/underscores.dart';
 import 'package:hangman/mechanics/hint_category.dart';
 
 class HangmanGame extends StatefulWidget {
@@ -100,7 +97,7 @@ class _HangmanGameState extends State<HangmanGame> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const StatusImage(),
+            StatusImage(incorrectGuesses: _currentIncorrectGuesses),
             Text(
               _displayedWordWithUnderscores,
               style: const TextStyle(fontSize: 50),

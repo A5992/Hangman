@@ -59,13 +59,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+
 assets:
-  - assets/hangman_0.png
-  - assets/hangman_1.png
-  - assets/hangman_2.png
-  - assets/hangman_3.png
-  - assets/hangman_4.png
-  - assets/hangman_5.png
+  - hangman/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
