@@ -1,36 +1,24 @@
 import 'package:flutter/material.dart';
 
 class StatusImage extends StatelessWidget {
-  int incorrectGuesses;
+  final int incorrectGuesses;
 
-  StatusImage({Key? key, required this.incorrectGuesses}) : super(key: key);
+  const StatusImage({Key? key, required this.incorrectGuesses})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String image;
-    switch (incorrectGuesses) {
-      case 0:
-        image = 'assets/Hangman_0.png';
-        break;
-      case 1:
-        image = 'assets/Hangman_1.png';
-        break;
-      case 2:
-        image = 'assets/Hangman_2.png';
-        break;
-      case 3:
-        image = 'assets/Hangman_3.png';
-        break;
-      case 4:
-        image = 'assets/Hangman_4.png';
-        break;
-      case 5:
-        image = 'assets/Hangman_5.png';
-        break;
-      default:
-        image = 'assets/Hangman_0.png';
-        break;
-    }
+    List<String> images = [
+      'assets/Hangman_0.png',
+      'assets/Hangman_1.png',
+      'assets/Hangman_2.png',
+      'assets/Hangman_3.png',
+      'assets/Hangman_4.png',
+      'assets/Hangman_5.png',
+    ];
+
+    String image =
+        incorrectGuesses < images.length ? images[incorrectGuesses] : images[0];
 
     return Image(image: AssetImage(image));
   }
