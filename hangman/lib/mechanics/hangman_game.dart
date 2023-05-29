@@ -29,6 +29,7 @@ class _HangmanGameState extends State<HangmanGame> {
   @override
   void initState() {
     super.initState();
+    player.load('assets/fatalitysound.mp3');
     final wordAndCategory = _randomWordAndCategory();
     _word = wordAndCategory.word;
     _category = wordAndCategory.category;
@@ -124,7 +125,7 @@ class _HangmanGameState extends State<HangmanGame> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                  _hasWon() ? 'assets/winner.png' : 'assets/fatality.png'),
+                  _hasWon() ? 'assets/winner.gif' : 'assets/fatality.png'),
               Text(
                 _hasWon()
                     ? 'Congratulations! You won!'
@@ -156,11 +157,13 @@ class _HangmanGameState extends State<HangmanGame> {
               _displayedWordWithUnderscores,
               style: const TextStyle(fontSize: 50),
             ),
-            OnScreenKeyboard(
-              onLetterPressed: _guessLetter,
-            ),
             HintCategory(category: _category),
           ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: OnScreenKeyboard(
+            onLetterPressed: _guessLetter,
+          ),
         ),
       );
     }
