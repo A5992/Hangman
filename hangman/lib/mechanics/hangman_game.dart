@@ -101,7 +101,7 @@ class _HangmanGameState extends State<HangmanGame> {
 
   bool _isGameOver() {
     if (_currentIncorrectGuesses >= _maxIncorrectGuesses && !_hasWon()) {
-      player.play('assets/your_audio_file.mp3');
+      player.play('assets/fatalitysound.mp3');
       return true;
     } else {
       return _currentIncorrectGuesses >= _maxIncorrectGuesses || _hasWon();
