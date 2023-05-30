@@ -62,12 +62,6 @@ class _HangmanGameState extends State<HangmanGame> {
         case 5:
           category = "Movies";
           break;
-        case 6:
-          category = "TV Shows";
-          break;
-        case 7:
-          category = "Books";
-          break;
         default:
           category = "Unknown Category";
           break;
