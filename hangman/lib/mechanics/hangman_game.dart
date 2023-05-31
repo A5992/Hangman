@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hangman/mechanics/hangman_words.dart';
 import 'package:hangman/mechanics/on_screen_keyboard.dart';
 import 'package:hangman/mechanics/status_image.dart';
 import 'package:hangman/mechanics/hint_category.dart';
@@ -8,7 +7,8 @@ import 'package:hangman/mechanics/difficulty_settings.dart';
 
 class HangmanGame extends StatefulWidget {
   final DifficultySettings difficultySettings;
-  const HangmanGame({Key? key, required this.difficultySettings}) : super(key: key);
+  const HangmanGame({Key? key, required this.difficultySettings})
+      : super(key: key);
 
   @override
   State<HangmanGame> createState() => _HangmanGameState();
@@ -38,7 +38,8 @@ class _HangmanGameState extends State<HangmanGame> {
   @override
   void initState() {
     super.initState();
-    final wordAndCategory = difficultySettings.getRandomWordEntry();
+    final wordAndCategory =
+        widget.difficultySettings.getRandomWordAndCategory();
     _word = wordAndCategory.word;
     _category = wordAndCategory.category;
     _displayedWord =

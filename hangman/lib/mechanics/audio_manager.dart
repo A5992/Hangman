@@ -4,10 +4,10 @@ class AudioManager {
   final player = AudioCache();
 
   AudioManager() {
-    player.load('assets/fatalitysound.mp3');
+    player.load('fatalitysound.mp3');
   }
 
   void playGameOverSound() {
-    player.play('assets/fatalitysound.mp3');
+    player.play('fatalitysound.mp3');
   }
 }
