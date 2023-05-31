@@ -1,14 +1,14 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hangman/mechanics/hangman_words.dart';
 import 'package:hangman/mechanics/on_screen_keyboard.dart';
 import 'package:hangman/mechanics/status_image.dart';
 import 'package:hangman/mechanics/hint_category.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:hangman/mechanics/audio_manager.dart';
+import 'package:hangman/mechanics/difficulty_settings.dart';
 
 class HangmanGame extends StatefulWidget {
-  const HangmanGame({Key? key}) : super(key: key);
+  final DifficultySettings difficultySettings;
+  const HangmanGame({Key? key, required this.difficultySettings}) : super(key: key);
 
   @override
   State<HangmanGame> createState() => _HangmanGameState();
@@ -18,10 +18,19 @@ class _HangmanGameState extends State<HangmanGame> {
   late String _word;
   late String _category;
   late List<String> _displayedWord;
+  final AudioManager _audioManager = AudioManager();
   final Set<String> _guessedLetters = {};
-  final player = AudioCache();
-  String get _displayedWordWithUnderscores =>
-      _displayedWord.map((c) => c == '_' ? '_ ' : '$c ').join();
+  String get _displayedWordWithUnderscores {
+    return _displayedWord.map((c) {
+      if (c == '_') {
+        return '_ ';
+      } else if (c == ' ') {
+        return '  '; // space represented as a double space for visibility
+      } else {
+        return '$c ';
+      }
+    }).join();
+  }
 
   final int _maxIncorrectGuesses = 6;
   int _currentIncorrectGuesses = 0;
@@ -29,61 +38,29 @@ class _HangmanGameState extends State<HangmanGame> {
   @override
   void initState() {
     super.initState();
-    player.load('assets/fatalitysound.mp3');
-    final wordAndCategory = _randomWordAndCategory();
+    final wordAndCategory = difficultySettings.getRandomWordEntry();
     _word = wordAndCategory.word;
     _category = wordAndCategory.category;
-    _displayedWord = List.generate(_word.length, (_) => '_');
-  }
-
-  WordAndCategory _randomWordAndCategory() {
-    final random = Random();
-
-    if (words.isNotEmpty) {
-      WordEntry entry = words[random.nextInt(words.length)];
-
-      String category;
-      switch (entry.category) {
-        case 0:
-          category = "Cities";
-          break;
-        case 1:
-          category = "Countries";
-          break;
-        case 2:
-          category = "Animals";
-          break;
-        case 3:
-          category = "Food";
-          break;
-        case 4:
-          category = "Sports";
-          break;
-        case 5:
-          category = "Movies";
-          break;
-        default:
-          category = "Unknown Category";
-          break;
-      }
-
-      return WordAndCategory(word: entry.word, category: category);
-    } else {
-      throw Exception("No words available");
-    }
+    _displayedWord =
+        List.generate(_word.length, (i) => _word[i] == ' ' ? ' ' : '_');
   }
 
   void _guessLetter(String letter) {
+    if (letter == '') {
+      return;
+    }
+
     String lowerLetter = letter.toLowerCase();
     String lowerWord = _word.toLowerCase();
     setState(() {
       _guessedLetters.add(letter);
     });
+
     if (lowerWord.contains(lowerLetter)) {
       for (int i = 0; i < _word.length; i++) {
         if (lowerWord[i] == lowerLetter) {
           setState(() {
-            _displayedWord[i] = letter;
+            _displayedWord[i] = _word[i];
           });
         }
       }
@@ -96,7 +73,7 @@ class _HangmanGameState extends State<HangmanGame> {
 
   bool _isGameOver() {
     if (_currentIncorrectGuesses >= _maxIncorrectGuesses && !_hasWon()) {
-      player.play('assets/fatalitysound.mp3');
+      _audioManager.playGameOverSound();
       return true;
     } else {
       return _currentIncorrectGuesses >= _maxIncorrectGuesses || _hasWon();
@@ -162,11 +139,4 @@ class _HangmanGameState extends State<HangmanGame> {
       );
     }
   }
-}
-
-class WordAndCategory {
-  final String word;
-  final String category;
-
-  WordAndCategory({required this.word, required this.category});
 }

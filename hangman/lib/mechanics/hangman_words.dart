@@ -329,6 +329,13 @@ final List<WordEntry> words = [
   WordEntry(word: '2001: A Space Odyssey', category: 5, difficulty: 3),
 ];
 
+class WordAndCategory {
+  final String word;
+  final String category;
+
+  WordAndCategory({required this.word, required this.category});
+}
+
 class WordEntry {
   final String word;
   final int category;
@@ -340,6 +347,43 @@ class WordEntry {
     required this.difficulty,
   });
 }
+
+WordAndCategory randomWordAndCategory() {
+    final random = Random();
+
+    if (words.isNotEmpty) {
+      WordEntry entry = words[random.nextInt(words.length)];
+
+      String category;
+      switch (entry.category) {
+        case 0:
+          category = "Cities";
+          break;
+        case 1:
+          category = "Countries";
+          break;
+        case 2:
+          category = "Animals";
+          break;
+        case 3:
+          category = "Food";
+          break;
+        case 4:
+          category = "Sports";
+          break;
+        case 5:
+          category = "Movies";
+          break;
+        default:
+          category = "Unknown Category";
+          break;
+      }
+
+      return WordAndCategory(word: entry.word, category: category);
+    } else {
+      throw Exception("No words available");
+    }
+  }
 
 WordEntry getRandomWord(int difficulty) {
   final random = Random();
