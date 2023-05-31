@@ -6,9 +6,7 @@ void showSettingsPanel(BuildContext context) {
   showModalBottomSheet(
     context: context,
     builder: (context) {
-      // return const SettingsPanel();
-      // Define SettingsPanel or replace it with an existing widget.
-      return Container(); // Temporary replacement
+      return Container();
     },
   );
 }
@@ -17,9 +15,7 @@ void showErrorDialog(BuildContext context) {
   showDialog(
     context: context,
     builder: (context) {
-      // return const ErrorDialog();
-      // Define ErrorDialog or replace it with an existing widget.
-      return const AlertDialog(); // Temporary replacement
+      return const AlertDialog();
     },
   );
 }
@@ -31,6 +27,12 @@ class DifficultySettings {
   final List<WordEntry> levelThree = [];
 
   List<int> selectedLevels = [0, 1, 2, 3];
+
+  DifficultySettings(List<WordEntry> words) {
+    for (var entry in words) {
+      addWordEntry(entry);
+    }
+  }
 
   void addWordEntry(WordEntry entry) {
     switch (entry.difficulty) {
@@ -56,9 +58,10 @@ class DifficultySettings {
     selectedLevels = newLevels;
   }
 
-  WordEntry getRandomWordEntry() {
+  WordAndCategory getRandomWordAndCategory() {
+    final random = Random();
     // Combine selected difficulty levels into a single list
-    List<WordEntry> combined = [];
+    final List<WordEntry> combined = [];
     for (var level in selectedLevels) {
       switch (level) {
         case 0:
@@ -80,9 +83,36 @@ class DifficultySettings {
 
     // Return a random word from the combined list
     if (combined.isNotEmpty) {
-      return combined[Random().nextInt(combined.length)];
+      WordEntry entry = combined[random.nextInt(combined.length)];
+
+      String category;
+      switch (entry.category) {
+        case 0:
+          category = "Cities";
+          break;
+        case 1:
+          category = "Countries";
+          break;
+        case 2:
+          category = "Animals";
+          break;
+        case 3:
+          category = "Food";
+          break;
+        case 4:
+          category = "Sports";
+          break;
+        case 5:
+          category = "Movies";
+          break;
+        default:
+          category = "Unknown Category";
+          break;
+      }
+
+      return WordAndCategory(word: entry.word, category: category);
     } else {
-      throw Exception("No words available");
+      throw Exception("No words available.");
     }
   }
 }
@@ -131,7 +161,10 @@ class ErrorDialog extends StatelessWidget {
 }
 
 class DifficultySettingsScreen extends StatefulWidget {
-  const DifficultySettingsScreen({super.key});
+  final DifficultySettings difficultySettings;
+
+  const DifficultySettingsScreen({Key? key, required this.difficultySettings})
+      : super(key: key);
 
   @override
   State<DifficultySettingsScreen> createState() =>
@@ -139,11 +172,17 @@ class DifficultySettingsScreen extends StatefulWidget {
 }
 
 class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
-  DifficultySettings difficultySettings = DifficultySettings();
+  late DifficultySettings difficultySettings;
   bool levelZeroSelected = true;
   bool levelOneSelected = true;
   bool levelTwoSelected = true;
   bool levelThreeSelected = true;
+
+  @override
+  void initState() {
+    super.initState();
+    difficultySettings = widget.difficultySettings;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +197,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             value: levelZeroSelected,
             onChanged: (bool? value) {
               setState(() {
-                levelZeroSelected = value ?? false;
+                levelZeroSelected = value!;
               });
             },
           ),
@@ -167,7 +206,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             value: levelOneSelected,
             onChanged: (bool? value) {
               setState(() {
-                levelOneSelected = value ?? false;
+                levelOneSelected = value!;
               });
             },
           ),
@@ -176,7 +215,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             value: levelTwoSelected,
             onChanged: (bool? value) {
               setState(() {
-                levelTwoSelected = value ?? false;
+                levelTwoSelected = value!;
               });
             },
           ),
@@ -185,7 +224,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             value: levelThreeSelected,
             onChanged: (bool? value) {
               setState(() {
-                levelThreeSelected = value ?? false;
+                levelThreeSelected = value!;
               });
             },
           ),
