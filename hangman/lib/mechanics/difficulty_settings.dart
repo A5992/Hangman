@@ -193,7 +193,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
       body: ListView(
         children: <Widget>[
           CheckboxListTile(
-            title: const Text('Level 0'),
+            title: Text(difficulties[0]),
             value: levelZeroSelected,
             onChanged: (bool? value) {
               setState(() {
@@ -202,7 +202,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             },
           ),
           CheckboxListTile(
-            title: const Text('Level 1'),
+            title: Text(difficulties[1]),
             value: levelOneSelected,
             onChanged: (bool? value) {
               setState(() {
@@ -211,7 +211,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             },
           ),
           CheckboxListTile(
-            title: const Text('Level 2'),
+            title: Text(difficulties[2]),
             value: levelTwoSelected,
             onChanged: (bool? value) {
               setState(() {
@@ -220,7 +220,7 @@ class _DifficultySettingsScreenState extends State<DifficultySettingsScreen> {
             },
           ),
           CheckboxListTile(
-            title: const Text('Level 3'),
+            title: Text(difficulties[3]),
             value: levelThreeSelected,
             onChanged: (bool? value) {
               setState(() {
