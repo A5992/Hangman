@@ -6,8 +6,10 @@ import 'package:hangman/mechanics/audio_manager.dart';
 import 'package:hangman/mechanics/difficulty_settings.dart';
 
 class HangmanGame extends StatefulWidget {
+  final bool hintsEnabled;
   final DifficultySettings difficultySettings;
-  const HangmanGame({Key? key, required this.difficultySettings})
+  const HangmanGame(
+      {Key? key, required this.hintsEnabled, required this.difficultySettings})
       : super(key: key);
 
   @override
@@ -129,7 +131,10 @@ class _HangmanGameState extends State<HangmanGame> {
               _displayedWordWithUnderscores,
               style: const TextStyle(fontSize: 50),
             ),
-            HintCategory(category: _category),
+            HintCategory(
+              category: _category,
+              hintsEnabled: widget.hintsEnabled,
+            ),
           ],
         ),
         bottomNavigationBar: BottomAppBar(

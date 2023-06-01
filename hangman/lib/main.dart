@@ -8,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  DifficultySettings difficultySettings = DifficultySettings(words);
+  final DifficultySettings difficultySettings = DifficultySettings(words);
 
   MyApp({Key? key}) : super(key: key);
 
@@ -38,7 +38,7 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  bool _hintsEnabled = true;
+  bool hintsEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +74,7 @@ class _MainMenuState extends State<MainMenu> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => HangmanGame(
+                          hintsEnabled: hintsEnabled,
                           difficultySettings: widget.difficultySettings),
                     ),
                   );
@@ -100,10 +101,10 @@ class _MainMenuState extends State<MainMenu> {
                       ),
                     ),
                     Checkbox(
-                      value: _hintsEnabled,
+                      value: hintsEnabled,
                       onChanged: (bool? value) {
                         setState(() {
-                          _hintsEnabled = value!;
+                          hintsEnabled = value!;
                         });
                       },
                     ),
