@@ -55,6 +55,11 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
+    - assets/audio/
+    - assets/audio/winner.mp3
+    - assets/audio/fatalitysound.mp3
+
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

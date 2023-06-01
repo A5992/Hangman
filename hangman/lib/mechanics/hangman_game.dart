@@ -75,12 +75,18 @@ class _HangmanGameState extends State<HangmanGame> {
   }
 
   bool _isGameOver() {
-    if (_currentIncorrectGuesses >= _maxIncorrectGuesses && !_hasWon()) {
-      _audioManager.playGameOverSound();
-      return true;
-    } else {
-      return _currentIncorrectGuesses >= _maxIncorrectGuesses || _hasWon();
+    bool gameIsOver =
+        _currentIncorrectGuesses >= _maxIncorrectGuesses || _hasWon();
+
+    if (gameIsOver) {
+      if (_hasWon()) {
+        _audioManager.playWinnerSound();
+      } else {
+        _audioManager.playGameOverSound();
+      }
     }
+
+    return gameIsOver;
   }
 
   bool _hasWon() {
